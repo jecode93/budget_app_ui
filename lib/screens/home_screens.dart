@@ -1,3 +1,5 @@
+import 'package:budger_app_ui/data/data.dart';
+import 'package:budger_app_ui/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,10 +40,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverChildBuilderDelegate((BuildContext context, int index) {
               return Container(
                 margin: EdgeInsets.all(10),
-                color: Colors.blue,
-                height: 100.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      offset: Offset(0, 2),
+                      blurRadius: 6.0,
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: BarChar(expenses: weeklySpending),
               );
-            }),
+            }, childCount: 1),
           ),
         ],
       ),
