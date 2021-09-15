@@ -1,4 +1,7 @@
+import 'package:budger_app_ui/helpers/color_helper.dart';
 import 'package:budger_app_ui/models/category_model.dart';
+import 'package:budger_app_ui/models/expense_model.dart';
+import 'package:budger_app_ui/widgets/radial_painter.dart';
 import 'package:flutter/material.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -10,10 +13,16 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  double containerMarginAndPadding = 20.0;
-  double containeHeight = 250.0;
   @override
   Widget build(BuildContext context) {
+    double containerMarginAndPadding = 20.0;
+    double containeHeight = 250.0;
+    double totalAmountSpent = 0;
+    widget.category!.expenses!.forEach((Expense expense) {
+      totalAmountSpent += expense.cost!;
+    });
+    final amountLeft = widget.category!.maxAmount - totalAmountSpent;
+    final double percent = amountLeft / widget.category!.maxAmount;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.category!.name.toString()),
@@ -43,6 +52,23 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       blurRadius: 6.0,
                     ),
                   ]),
+              child: CustomPaint(
+                foregroundPainter: RadialPainter(
+                  bgColor: Colors.grey[200],
+                  lineColor: getColor(context, percent),
+                  percent: percent,
+                  width: 15.0,
+                ),
+                child: Center(
+                  child: Text(
+                    '\$${amountLeft.toStringAsFixed(2)} / \$${widget.category!.maxAmount.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
